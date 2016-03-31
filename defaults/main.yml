@@ -1,2 +1,19 @@
 ---
-# defaults file for ubuntu_desktop_dac_setup
+
+ubuntu_desktop_dac_setup_ppa:
+  - ppa:webupd8team/sublime-text-3
+
+ubuntu_desktop_dac_setup_packages:
+  - chromium-browser
+  - vlc
+  - qemu
+  - qemu-kvm
+  - openssl
+  - screen
+  - tmux
+  - libssl-dev
+  - traceroute
+  - krb5-user
+  - krb5-config
+  - sssd
+  - sublime-text-installer

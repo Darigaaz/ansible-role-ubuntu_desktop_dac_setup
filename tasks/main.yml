@@ -1,11 +1,10 @@
 ---
 
-- name: Tst
-  debug: msg=Hello
 
-- name: Install some
-  apt: name=chromium-browser state=present update_cache=yes
-  become: true
-  register: result
+- name: Set ppa repos
+  apt_repository: repo={{ item }}
+  with_items: '{{ ubuntu_desktop_dac_setup_ppa }}'
 
-- debug: var=result verbosity=2
+- name: Install packages
+  apt: name={{ item }} state=present update_cache=yes
+  with_items: '{{ ubuntu_desktop_dac_setup_packages }}'

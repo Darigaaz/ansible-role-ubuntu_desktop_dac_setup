@@ -4,7 +4,7 @@
   debug: msg=Hello
 
 - name: Install some
-  apt: name=chromium_browser state=present update_cache=yes
+  apt: name=chromium-browser state=present update_cache=yes
   become: true
   register: result
 

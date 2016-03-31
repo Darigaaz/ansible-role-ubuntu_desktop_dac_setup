@@ -2,9 +2,15 @@
 
 
 - name: Set ppa repos
-  apt_repository: repo={{ item }}
+  apt_repository:
+    repo: '{{ item }}'
   with_items: '{{ ubuntu_desktop_dac_setup_ppa }}'
 
 - name: Install packages
-  apt: name={{ item }} state=present update_cache=yes
+  apt:
+    name: '{{ item }}'
+    state: present
+    update_cache: yes
   with_items: '{{ ubuntu_desktop_dac_setup_packages }}'
+
+- include: ad.yml

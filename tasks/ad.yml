@@ -1,0 +1,36 @@
+---
+
+  - name: Add dc1.dac.local to /etc/hosts file
+    lineinfile:
+      dest: /etc/hosts
+      line: 172.20.32.2 dc1 dc1.dac.local
+      backup: yes
+
+  - name: SSSD config
+    notify: start SSSD
+    copy:
+      src: etc/sssd/sssd.conf
+      dest: /etc/sssd/sssd.conf
+      backup: yes
+      mode: 600
+      owner: root
+      group: root
+
+  - name: Home dirs with pam_mkhomedirs
+    lineinfile:
+      create: yes
+      dest: /etc/pam.d/common-session
+      regexp: session\s+required\s+pam_mkhomedir.so\s+skel=/etc/skel/\s+umask=0022
+      line: 'session	required	pam_mkhomedir.so skel=/etc/skel/ umask=0022'
+      insertafter: session\s+required\s+pam_unix.so
+
+  - name: Desktop auth
+    ini_file:
+      backup: yes
+      dest: /etc/lightdm/lightdm.conf
+      section: SeatDefaults
+      option: '{{ item.key }}'
+      value: '{{ item.value }}'
+    with_dict:
+       greeter-show-manual-login: true
+       greeter-hide-users: true

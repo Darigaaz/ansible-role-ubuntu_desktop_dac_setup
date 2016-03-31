@@ -1,2 +1,11 @@
 ---
-# handlers file for ubuntu_desktop_dac_setup
+
+  - name: start SSSD
+    service:
+      name: sssd
+      state: started
+  
+  - name: restart SSSD
+    service:
+      name: sssd
+      state: restarted

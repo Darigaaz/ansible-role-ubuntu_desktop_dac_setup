@@ -17,3 +17,5 @@ ubuntu_desktop_dac_setup_packages:
   - krb5-config
   - sssd
   - sublime-text-installer
+  - debconf
+  - debconf-utils

@@ -1,4 +1,11 @@
 ---
 
+- name: Tst
+  debug: msg=Hello
+
 - name: Install some
   apt: name=chromium_browser state=present update_cache=yes
+  become: true
+  register: result
+
+- debug: var=result verbosity=2

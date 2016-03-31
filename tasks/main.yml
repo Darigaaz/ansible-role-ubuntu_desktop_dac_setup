@@ -1,2 +1,4 @@
 ---
-# tasks file for ubuntu_desktop_dac_setup
+
+- name: Install some
+  apt: name=chromium_browser state=present update_cache=yes

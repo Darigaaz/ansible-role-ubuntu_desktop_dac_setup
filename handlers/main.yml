@@ -4,8 +4,13 @@
     service:
       name: sssd
       state: started
-  
+
   - name: restart SSSD
     service:
       name: sssd
       state: restarted
+
+  - name: enable SSSD
+    service:
+      name: sssd
+      enabled: yes

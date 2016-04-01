@@ -7,7 +7,7 @@
       backup: yes
 
   - name: SSSD config
-    notify: start SSSD
+    notify: enable SSSD
     copy:
       src: etc/sssd/sssd.conf
       dest: /etc/sssd/sssd.conf
@@ -24,13 +24,81 @@
       line: 'session	required	pam_mkhomedir.so skel=/etc/skel/ umask=0022'
       insertafter: session\s+required\s+pam_unix.so
 
-  - name: Desktop auth
-    ini_file:
-      backup: yes
+  - name: Configure Lightdm login
+    lineinfile:
+      create: yes
       dest: /etc/lightdm/lightdm.conf
-      section: SeatDefaults
-      option: '{{ item.key }}'
-      value: '{{ item.value }}'
+      regexp: '{{ item.key }}='
+      line: '{{ item.key }}={{ item.value }}'
+      insertafter: \[SeatDefaults\]
     with_dict:
        greeter-show-manual-login: true
        greeter-hide-users: true
+
+  - name: Configure samba
+    ini_file:
+      backup: yes
+      dest: /etc/samba/smb.conf
+      section: '{{ item.section }}'
+      option: '{{ item.option }}'
+      value: '{{ item.value }}'
+    with_items:
+      - section: global
+        option: realm
+        value: dac.local
+      - section: global
+        option: client signing
+        value: 'yes'
+      - section: global
+        option: client use spnego
+        value: 'yes'
+      - section: global
+        option: kerberos method
+        value: secrets and keytab
+      - section: global
+        option: security
+        value: ads
+      - section: global
+        option: workgroup
+        value: DAC
+    tags: samba
+
+  - name: Configure Kerberos
+    ini_file:
+      backup: yes
+      dest: /etc/krb5.conf
+      section: '{{ item.section }}'
+      option: '{{ item.option }}'
+      value: '{{ item.value }}'
+    with_items:
+      - section: libdefaults
+        option: default
+        value: DAC.LOCAL
+      - section: libdefaults
+        option: default_realm
+        value: DAC.LOCAL
+      - section: domain_realm
+        option: .dc1.dac.local
+        value: DC1.DAC.LOCAL
+      - section: domain_realm
+        option: dc1.dac.local
+        value: DC1.DAC.LOCAL
+    tags: krb
+  
+  - name: Configure Kerberos 2
+    blockinfile:
+      backup: yes
+      dest: /etc/krb5.conf
+      insertafter: '{{ item.section }}'
+      block: '{{ item.block }}'
+      marker: '{{ item.marker }}'
+    with_items:
+      - section: \[realms\]
+        marker: "# {mark} DAC.LOCAL ANSIBLE MANAGED BLOCK"
+        block: |
+          DAC.LOCAL = {
+            kdc = dc1.dac.local
+            admin_server = dc1.dac.local
+            default_domain = dac.local
+          }
+    tags: krb

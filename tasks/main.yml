@@ -13,4 +13,8 @@
     update_cache: yes
   with_items: '{{ ubuntu_desktop_dac_setup_packages }}'
 
-- include: ad.yml
+  - name: Configure AD
+    include: ad.yml
+
+  - name: Configure sshd and keys
+    include: ssh.yml

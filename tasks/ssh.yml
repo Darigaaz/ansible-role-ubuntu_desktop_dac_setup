@@ -1,0 +1,7 @@
+---
+
+  - name: Add key for maxx user
+    authorized_key:
+      user: maxx
+      key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDH4exjac3uNVe96H1s1T/VuIbO4vCgY/CYXPm7ekceY+7Oj1p0t6rUTNbs4iGPZVNhArTp+EEmnmJkt1ls7cXuTpH00Zuucz/IBaEIlyOugsXUsmM7dlLJHrfk5h60lq19khGLjyUaJcOtvlqXC/2/YUrsjhKmqCgB7uOa+0nWy4jt37VjbqQTDTHQp3st55x0l/+rFFmbm0NyYtRpFV2w5Q8dw1JF2VF7gDwD1vRtAmQ9emlF9EYThxFO6SPOWyrTO1fSnydusMSnJYtJ9b8esbMwYas/xOaJJpl/wIr/I7d5uHAOARpik02cRpHcXyCxGIvKqqNK21tVCd+FhHcL maxx@DesignerMacMini.local
+    tags: ssh

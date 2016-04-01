@@ -19,3 +19,8 @@ ubuntu_desktop_dac_setup_packages:
   - sublime-text-installer
   - debconf
   - debconf-utils
+  - samba
+  - system-config-samba
+  - samba-client
+  - samba-common
+  - cifs-utils

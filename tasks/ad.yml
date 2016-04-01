@@ -12,7 +12,7 @@
       src: etc/sssd/sssd.conf
       dest: /etc/sssd/sssd.conf
       backup: yes
-      mode: 600
+      mode: 0600
       owner: root
       group: root
 
@@ -25,15 +25,20 @@
       insertafter: session\s+required\s+pam_unix.so
 
   - name: Configure Lightdm login
-    lineinfile:
-      create: yes
+    ini_file:
+      backup: yes
       dest: /etc/lightdm/lightdm.conf
-      regexp: '{{ item.key }}='
-      line: '{{ item.key }}={{ item.value }}'
-      insertafter: \[SeatDefaults\]
-    with_dict:
-       greeter-show-manual-login: true
-       greeter-hide-users: true
+      section: '{{ item.section }}'
+      option: '{{ item.option }}'
+      value: '{{ item.value }}'
+    with_items:
+      - section: SeatDefaults
+        option: greeter-show-manual-login
+        value: true
+      - section: SeatDefaults
+        option: greeter-hide-users
+        value: true
+      
 
   - name: Configure samba
     ini_file:

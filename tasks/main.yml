@@ -1,17 +1,17 @@
 ---
 
 
-- name: Set ppa repos
-  apt_repository:
-    repo: '{{ item }}'
-  with_items: '{{ ubuntu_desktop_dac_setup_ppa }}'
+  - name: Set ppa repos
+    apt_repository:
+      repo: '{{ item }}'
+    with_items: '{{ ubuntu_desktop_dac_setup_ppa }}'
 
-- name: Install packages
-  apt:
-    name: '{{ item }}'
-    state: present
-    update_cache: yes
-  with_items: '{{ ubuntu_desktop_dac_setup_packages }}'
+  - name: Install packages
+    apt:
+      name: '{{ item }}'
+      state: present
+      update_cache: yes
+    with_items: '{{ ubuntu_desktop_dac_setup_packages }}'
 
   - name: Configure AD
     include: ad.yml

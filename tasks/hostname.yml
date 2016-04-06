@@ -1,0 +1,21 @@
+---
+
+  - name: Set hostname
+    hostname:
+      name: "{{ ubuntu_desktop_dac_hostname | default( inventory_hostname ) }}"
+    tags: hostname
+
+  - name: Fix /etc/hosts
+    lineinfile:
+      backrefs: yes
+      dest: /etc/hosts
+      regexp: '^(127\.0\.0\.1(?!.*\s{{ item }}\s).*)'
+      line: '\1	{{ item }}'
+      state: present
+      owner: root
+      group: root
+      mode: 0644
+    with_items:
+      - '{{ ubuntu_desktop_dac_hostname | default( inventory_hostname )}}'
+      - "{{ (ubuntu_desktop_dac_hostname | default( inventory_hostname )).split('.') | first }}"
+    tags: hostname

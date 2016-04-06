@@ -1,0 +1,23 @@
+---
+
+  - name: Set ppa repos
+    apt_repository:
+      repo: '{{ item }}'
+    with_items: '{{ ubuntu_desktop_dac_setup_ppa }}'
+    ignore_errors: yes
+
+  - name: Preconfigure packages
+    include: packages/preconf.yaml
+
+  - name: Install packages
+    apt:
+      name: '{{ item }}'
+      state: present
+      update_cache: yes
+    with_items: '{{ ubuntu_desktop_dac_setup_packages }}'
+    ignore_errors: yes
+
+  - name: Install debs
+    include: packages/install_deb.yml deb_name='{{ item.key }}'  deb_url='{{ item.value.deb_url }}'  deb_version='{{ item.value.deb_version }}'
+    with_dict: '{{ ubuntu_desktop_dac_setup_debs }}'
+    tags: debs

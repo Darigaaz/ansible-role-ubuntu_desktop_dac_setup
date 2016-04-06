@@ -34,76 +34,70 @@
     with_items:
       - section: SeatDefaults
         option: greeter-show-manual-login
-        value: true
+        value: 'true'
       - section: SeatDefaults
         option: greeter-hide-users
-        value: true
-      
+        value: 'true'
 
   - name: Configure samba
-    ini_file:
-      backup: yes
+    lineinfile:
       dest: /etc/samba/smb.conf
-      section: '{{ item.section }}'
-      option: '{{ item.option }}'
-      value: '{{ item.value }}'
+      regexp: '\s*{{ item.option }}\s*='
+      line: '{{ item.option }} = {{ item.value }}'
+      insertafter: '\[global\]'
     with_items:
-      - section: global
-        option: realm
+      - option: realm
         value: dac.local
-      - section: global
-        option: client signing
+      - option: client signing
         value: 'yes'
-      - section: global
-        option: client use spnego
+      - option: client use spnego
         value: 'yes'
-      - section: global
-        option: kerberos method
+      - option: kerberos method
         value: secrets and keytab
-      - section: global
-        option: security
-        value: ads
-      - section: global
-        option: workgroup
-        value: DAC
+      - option: workgroup
+        value: dac.local
     tags: samba
 
-  - name: Configure Kerberos
-    ini_file:
-      backup: yes
-      dest: /etc/krb5.conf
-      section: '{{ item.section }}'
-      option: '{{ item.option }}'
-      value: '{{ item.value }}'
-    with_items:
-      - section: libdefaults
-        option: default
-        value: DAC.LOCAL
-      - section: libdefaults
-        option: default_realm
-        value: DAC.LOCAL
-      - section: domain_realm
-        option: .dc1.dac.local
-        value: DC1.DAC.LOCAL
-      - section: domain_realm
-        option: dc1.dac.local
-        value: DC1.DAC.LOCAL
-    tags: krb
-  
-  - name: Configure Kerberos 2
-    blockinfile:
-      backup: yes
-      dest: /etc/krb5.conf
-      insertafter: '{{ item.section }}'
-      block: '{{ item.block }}'
-      marker: '{{ item.marker }}'
-    with_items:
-      - section: \[realms\]
-        marker: "# {mark} DAC.LOCAL ANSIBLE MANAGED BLOCK"
-        block: |
-          DAC.LOCAL = {
-            kdc = dc1.dac.local
-            admin_server = dc1.dac.local
-            default_domain = dac.local
-          }
-    tags: krb
+
+  # - name: Configure Kerberos
+  #   ini_file:
+  #     backup: yes
+  #     dest: /etc/krb5.conf
+  #     section: '{{ item.section }}'
+  #     option: '{{ item.option }}'
+  #     value: '{{ item.value }}'
+  #   with_items:
+  #     - section: libdefaults
+  #       option: default
+  #       value: DAC.LOCAL
+  #     - section: libdefaults
+  #       option: default_realm
+  #       value: DAC.LOCAL
+  #     - section: domain_realm
+  #       option: .dc1.dac.local
+  #       value: DC1.DAC.LOCAL
+  #     - section: domain_realm
+  #       option: dc1.dac.local
+  #       value: DC1.DAC.LOCAL
+  #     - section: realms
+  #       option: dummy
+  #       value: dummy
+  #   tags: krb
+  # 
+  # - name: Configure Kerberos 2
+  #   blockinfile:
+  #     backup: yes
+  #     dest: /etc/krb5.conf
+  #     insertafter: '{{ item.section }}'
+  #     block: '{{ item.block }}'
+  #     marker: '{{ item.marker }}'
+  #   with_items:
+  #     - section: \[realms\]
+  #       marker: "# {mark} DAC.LOCAL ANSIBLE MANAGED BLOCK"
+  #       block: |
+  #         DAC.LOCAL = {
+  #           kdc = dc1.dac.local
+  #           admin_server = dc1.dac.local
+  #           default_domain = dac.local
+  #         }
+  #   tags: krb

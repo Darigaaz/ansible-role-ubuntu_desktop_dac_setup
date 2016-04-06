@@ -1,0 +1,9 @@
+---
+
+  - debconf:
+      name: '{{ item.name }}'
+      question: '{{ item.question }}'
+      vtype: '{{ item.vtype }}'
+      value: '{{ item.value }}'
+    with_items: '{{ ubuntu_desktop_dac_setup_debconf }}'
+    tags: preconf

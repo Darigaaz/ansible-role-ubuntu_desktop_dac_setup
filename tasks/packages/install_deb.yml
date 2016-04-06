@@ -1,0 +1,21 @@
+---
+
+  - block:
+    - name: 'Check if {{ deb_name }} is installed'
+      command: dpkg-query -W {{ deb_name }}
+      register: deb_check
+      failed_when: deb_check.rc > 1
+      changed_when: deb_check.rc == 1
+
+    - name: 'Download {{ deb_name }}'
+      get_url: 
+        url: '{{ deb_url }}'
+        dest: '/root/{{ deb_version }}.deb'
+      when: deb_check.rc == 1
+
+    - name: 'Installing {{ deb_name }}'
+      apt:
+        deb: '/root/{{ deb_version }}.deb'
+      when: deb_check.rc == 1
+#      sudo: true
+    when: deb_name is defined and deb_url is defined and deb_version is defined

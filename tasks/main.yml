@@ -1,17 +1,13 @@
 ---
 
+  - name: Hostname
+    include: hostname.yml
 
-  - name: Set ppa repos
-    apt_repository:
-      repo: '{{ item }}'
-    with_items: '{{ ubuntu_desktop_dac_setup_ppa }}'
+  - name: Packages
+    include: packages.yml
 
-  - name: Install packages
-    apt:
-      name: '{{ item }}'
-      state: present
-      update_cache: yes
-    with_items: '{{ ubuntu_desktop_dac_setup_packages }}'
+  - name: Configure lamp
+    include: lamp.yml
 
   - name: Configure AD
     include: ad.yml

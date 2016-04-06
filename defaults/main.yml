@@ -1,5 +1,7 @@
 ---
 
+# ubuntu_desktop_dac_hostname: 
+
 ubuntu_desktop_dac_setup_ppa:
   - ppa:webupd8team/sublime-text-3
 
@@ -24,3 +26,97 @@ ubuntu_desktop_dac_setup_packages:
   - samba-client
   - samba-common
   - cifs-utils
+  - whois
+  - openjdk-7-jre
+  - git
+  - git-extras
+  # - 'lamp-server^'
+  - apache2
+  - mariadb-server
+  - php5
+  - mcrypt
+  - php5-mcrypt
+  - tcpd
+  - phpmyadmin
+
+# private vars to avoid "recursion error"
+_ubuntu_desktop_dac_setup_debs:
+  dropbox_version: dropbox_2015.02.12_amd64
+  smartgit_version: smartgit-7_1_2
+
+ubuntu_desktop_dac_setup_debs:
+  dropbox:
+    deb_version: "{{ _ubuntu_desktop_dac_setup_debs.dropbox_version }}"
+    deb_url: "https://www.dropbox.com/download?dl=packages/ubuntu/{{ _ubuntu_desktop_dac_setup_debs.dropbox_version }}.deb" 
+  smartgit:
+    deb_version: "{{ _ubuntu_desktop_dac_setup_debs.smartgit_version }}"
+    deb_url: "http://www.syntevo.com/static/smart/download/smartgit/{{ _ubuntu_desktop_dac_setup_debs.smartgit_version }}.deb"
+
+ubuntu_desktop_dac_setup_debconf:
+  # kerberos:
+    - name: krb5-config
+      question: 'krb5-config/default_realm'
+      vtype: 'string'
+      value: DAC.LOCAL
+    - name: krb5-config
+      question: 'krb5-config/kerberos_servers'
+      vtype: 'string'
+      value: DC1.DAC.LOCAL
+    - name: heimdal-kdc
+      question: 'heimdal/realm'
+      vtype: 'string'
+      value: DAC.LOCAL
+    - name: krb5-config
+      question: 'krb5-config/admin_server'
+      vtype: 'string'
+      value: DC1.DAC.LOCAL
+    - name: krb5-config
+      question: 'krb5-config/dns_for_default'
+      vtype: 'boolean'
+      value: 'true'
+    - name: krb5-config
+      question: 'krb5-config/add_servers'
+      vtype: 'boolean'
+      value: 'true'
+  # mysql:
+    - name: 'mysql-server'
+      question: 'mysql-server/root_password'
+      vtype: 'password'
+      value: 'oper'
+    - name: 'mysql-server'
+      question: 'mysql-server/root_password_again'
+      vtype: 'password'
+      value: 'oper'
+  # phpmyadmin:
+    - name: phpmyadmin
+      question: 'phpmyadmin/reconfigure-webserver'
+      vtype: 'multiselect'
+      value: 'apache2'
+    - name: phpmyadmin
+      question: 'phpmyadmin/dbconfig-install'
+      vtype: 'boolean'
+      value: 'true'
+    - name: phpmyadmin
+      question: 'phpmyadmin/dbconfig-reinstall'
+      vtype: 'boolean'
+      value: 'true'
+    # - name: phpmyadmin
+    #   question: 'phpmyadmin/app-password-confirm'
+    #   vtype: 'password'
+    #   value: 'your-app-pwd''
+    - name: phpmyadmin
+      question: 'phpmyadmin/mysql/admin-pass'
+      vtype: 'password'
+      value: 'oper'
+    # - name: phpmyadmin
+    #   question: 'phpmyadmin/mysql/app-pass'
+    #   vtype: 'password'
+    #   value: 'your-app-db-pwd'
+    - name: phpmyadmin
+      question: 'phpmyadmin/mysql/admin-pass'
+      vtype: 'password'
+      value: 'oper'
+    - name: samba-common
+      question: 'samba-common/workgroup'
+      vtype: 'string'
+      value: 'dac.local'

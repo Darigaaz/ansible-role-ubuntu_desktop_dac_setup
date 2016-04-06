@@ -55,7 +55,9 @@
       - option: kerberos method
         value: secrets and keytab
       - option: workgroup
-        value: dac.local
+        value: dac
+      - option: security
+        value: ads
     tags: samba
 
 

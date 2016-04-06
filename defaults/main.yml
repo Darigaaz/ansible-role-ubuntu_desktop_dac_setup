@@ -30,7 +30,6 @@ ubuntu_desktop_dac_setup_packages:
   - openjdk-7-jre
   - git
   - git-extras
-  # - 'lamp-server^'
   - apache2
   - mariadb-server
   - php5
@@ -100,22 +99,23 @@ ubuntu_desktop_dac_setup_debconf:
       question: 'phpmyadmin/dbconfig-reinstall'
       vtype: 'boolean'
       value: 'true'
-    # - name: phpmyadmin
-    #   question: 'phpmyadmin/app-password-confirm'
-    #   vtype: 'password'
-    #   value: 'your-app-pwd''
+    - name: phpmyadmin
+      question: 'phpmyadmin/app-password-confirm'
+      vtype: 'password'
+      value: 'oper'
     - name: phpmyadmin
       question: 'phpmyadmin/mysql/admin-pass'
       vtype: 'password'
       value: 'oper'
-    # - name: phpmyadmin
-    #   question: 'phpmyadmin/mysql/app-pass'
-    #   vtype: 'password'
-    #   value: 'your-app-db-pwd'
+    - name: phpmyadmin
+      question: 'phpmyadmin/mysql/app-pass'
+      vtype: 'password'
+      value: 'oper'
     - name: phpmyadmin
       question: 'phpmyadmin/mysql/admin-pass'
       vtype: 'password'
       value: 'oper'
+    # samba
     - name: samba-common
       question: 'samba-common/workgroup'
       vtype: 'string'

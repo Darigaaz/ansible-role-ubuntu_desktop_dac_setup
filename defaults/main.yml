@@ -21,6 +21,7 @@ ubuntu_desktop_dac_setup_packages:
   - sublime-text-installer
   - debconf
   - debconf-utils
+  - dbconfig-common
   - samba
   - system-config-samba
   - samba-client
@@ -37,6 +38,13 @@ ubuntu_desktop_dac_setup_packages:
   - php5-mcrypt
   - tcpd
   - phpmyadmin
+  - gksu
+  - synaptic
+  - imagemagick
+  - gimp
+  - ubuntu-restricted-extras
+  - unity-tweak-tool
+  - memcached
 
 # private vars to avoid "recursion error"
 _ubuntu_desktop_dac_setup_debs:
@@ -77,6 +85,7 @@ ubuntu_desktop_dac_setup_debconf:
       question: 'krb5-config/add_servers'
       vtype: 'boolean'
       value: 'true'
+  # dbconfig-common
   # mysql:
     - name: 'mysql-server'
       question: 'mysql-server/root_password'
@@ -87,6 +96,10 @@ ubuntu_desktop_dac_setup_debconf:
       vtype: 'password'
       value: 'oper'
   # phpmyadmin:
+    - name: phpmyadmin
+      question: 'phpmyadmin/internal/skip-preseed'
+      vtype: 'boolean'
+      value: 'false'
     - name: phpmyadmin
       question: 'phpmyadmin/reconfigure-webserver'
       vtype: 'multiselect'

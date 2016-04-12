@@ -9,7 +9,7 @@
     lineinfile:
       backrefs: yes
       dest: /etc/hosts
-      regexp: '^(127\.0\.0\.1(?!.*\s{{ item }}\s).*)'
+      regexp: '^(127\.0\.1\.1(?!.*\s{{ item }}\s).*)'
       line: '\1	{{ item }}'
       state: present
       owner: root
